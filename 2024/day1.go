@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/vandvag/advent-of-go/aoc"
+	"github.com/vandvag/advent-of-go/mathematics"
 )
 
 func part1(input string) int {
@@ -42,11 +43,7 @@ func part1(input string) int {
 	var res int
 	for i := 0; i < len(left); i++ {
 		diff := left[i] - right[i]
-		if diff >= 0 {
-			res += diff
-		} else {
-			res += -diff
-		}
+		res += mathematics.AbsInt(diff)
 	}
 
 	return res
