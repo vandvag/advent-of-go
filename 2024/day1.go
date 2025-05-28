@@ -7,29 +7,33 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/vandvag/advent-of-go/utils"
+	"github.com/vandvag/advent-of-go/aoc"
 )
 
 func part1(input string) int {
 	var left []int
 	var right []int
 
-	utils.ForEachLine(input, func(line string) {
+	aoc.ForEachLine(input, func(line string) error {
 		tokens := strings.Split(line, "   ")
+
+		if len(tokens) != 2 {
+			return fmt.Errorf("Line: ")
+		}
 
 		left_int, err := strconv.Atoi(strings.TrimSpace(tokens[0]))
 		if err != nil {
-			// Handle it
-			log.Fatal("[FATAL]: left WTF\n")
+			return fmt.Errorf("Couldn't convert first token (%s) to int", tokens[0])
 		}
 		left = append(left, left_int)
 
 		right_int, err := strconv.Atoi(strings.TrimSpace(tokens[1]))
 		if err != nil {
-			// Handle it
-			log.Fatal("[FATAL]: right WTF\n")
+			return fmt.Errorf("Couldn't convert second token (%s) to int", tokens[1])
 		}
 		right = append(right, right_int)
+
+		return nil
 	})
 
 	sort.Ints(left)
@@ -50,7 +54,7 @@ func part1(input string) int {
 
 func Day01() {
 	fmt.Println("Day ", "01")
-	input, err := utils.ReadInput(2024, 1)
+	input, err := aoc.ReadInput(2024, 1)
 	if err != nil {
 		log.Fatal(err)
 	}
