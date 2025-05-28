@@ -1,13 +1,11 @@
-package utils
+package aoc
 
 import (
-	"bufio"
 	"fmt"
 	"io"
 	"log"
 	"net/http"
 	"os"
-	"strings"
 
 	"github.com/joho/godotenv"
 )
@@ -15,6 +13,10 @@ import (
 const baseURL = "https://adventofcode.com/%d/day/%d/input"
 
 func ReadInput(year int, day int) (string, error) {
+	if year > 2024 || year < 2015 {
+		return "", fmt.Errorf("Invalid year: %d", year)
+	}
+
 	if err := godotenv.Load(); err != nil {
 		log.Printf("[WARN]: Failed to load .env file: %v", err)
 	}
@@ -24,7 +26,7 @@ func ReadInput(year int, day int) (string, error) {
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		log.Fatal("Error creating HTTP request: %v\n", err)
+		log.Fatal("Error creating HTTP request: %s\n", err)
 	}
 
 	session_cookie, exists := os.LookupEnv("AOC_SESSION")
@@ -50,36 +52,4 @@ func ReadInput(year int, day int) (string, error) {
 	}
 
 	return string(body), nil
-}
-
-func MapLine[T any](input string, transform func(string) T) ([]T, error) {
-	var results []T
-
-	scanner := bufio.NewScanner(strings.NewReader(input))
-
-	for scanner.Scan() {
-		line := scanner.Text()
-		results = append(results, transform(line))
-	}
-
-	if err := scanner.Err(); err != nil {
-		return nil, err
-	}
-
-	return results, nil
-}
-
-func ForEachLine(input string, for_each func(string)) error {
-	scanner := bufio.NewScanner(strings.NewReader(input))
-
-	for scanner.Scan() {
-		line := scanner.Text()
-		for_each(line)
-	}
-
-	if err := scanner.Err(); err != nil {
-		return err
-	}
-
-	return nil
 }
