@@ -22,7 +22,7 @@ func GetInput(year int, day int) (string, error) {
 		return "", fmt.Errorf("Invalid day: %d\nAdvent of code runs from 1st till the 25th of December each year!\n", day)
 	}
 
-	file_path := filepath.Join("input", fmt.Sprintf("%d", year), fmt.Sprintf("%d", day)+".in")
+	file_path := filepath.Join("input", fmt.Sprintf("%d", year), fmt.Sprintf("%02d", day)+".in")
 
 	data, err := os.ReadFile(file_path)
 
