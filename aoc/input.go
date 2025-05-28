@@ -6,17 +6,58 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 
 	"github.com/joho/godotenv"
 )
 
 const baseURL = "https://adventofcode.com/%d/day/%d/input"
 
-func ReadInput(year int, day int) (string, error) {
+func GetInput(year int, day int) (string, error) {
 	if year > 2024 || year < 2015 {
-		return "", fmt.Errorf("Invalid year: %d", year)
+		return "", fmt.Errorf("Invalid year: %d\nAdvent of code started in 2015!\n", year)
 	}
 
+	if day <= 0 || day > 25 {
+		return "", fmt.Errorf("Invalid day: %d\nAdvent of code runs from 1st till the 25th of December each year!\n", day)
+	}
+
+	file_path := filepath.Join("input", fmt.Sprintf("%d", year), fmt.Sprintf("%d", day)+".in")
+
+	data, err := os.ReadFile(file_path)
+
+	if err == nil {
+		return string(data), nil
+	}
+
+	content, err := getInputFromAOCSite(year, day)
+	if err != nil {
+		return "", err
+	}
+
+	err = writeInputToFile(file_path, content)
+	if err != nil {
+		return "", err
+	}
+
+	data, err = os.ReadFile(file_path)
+	if err != nil {
+		return "", err
+	}
+
+	return string(data), nil
+}
+
+func writeInputToFile(file_path string, content []byte) error {
+	dir := filepath.Dir(file_path)
+	if err := os.MkdirAll(dir, os.ModePerm); err != nil {
+		return err
+	}
+
+	return os.WriteFile(file_path, content, 0644)
+}
+
+func getInputFromAOCSite(year int, day int) ([]byte, error) {
 	if err := godotenv.Load(); err != nil {
 		log.Printf("[WARN]: Failed to load .env file: %v", err)
 	}
@@ -31,25 +72,25 @@ func ReadInput(year int, day int) (string, error) {
 
 	session_cookie, exists := os.LookupEnv("AOC_SESSION")
 	if !exists {
-		return "", fmt.Errorf("Variable AOC_SESSION was not found.\nPlease set up an environment variable, AOC_SESSION, with the session id cookie\n")
+		return nil, fmt.Errorf("Variable AOC_SESSION was not found.\nPlease set up an environment variable, AOC_SESSION, with the session id cookie\n")
 	}
 
 	req.Header.Add("Cookie", "session="+session_cookie)
 
 	resp, err := client.Do(req)
 	if err != nil {
-		return "", fmt.Errorf("Error sending request to %s\n", url)
+		return nil, fmt.Errorf("Error sending request to %s\n", url)
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return "", fmt.Errorf("Error reading respone from %s\n", url)
+		return nil, fmt.Errorf("Error reading respone from %s\n", url)
 	}
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return "", fmt.Errorf("Error reading response body")
+		return nil, fmt.Errorf("Error reading response body")
 	}
 
-	return string(body), nil
+	return body, nil
 }

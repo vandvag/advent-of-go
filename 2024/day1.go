@@ -51,7 +51,7 @@ func part1(input string) int {
 
 func Day01() {
 	fmt.Println("Day ", "01")
-	input, err := aoc.ReadInput(2024, 1)
+	input, err := aoc.GetInput(2024, 1)
 	if err != nil {
 		log.Fatal(err)
 	}
