@@ -9,6 +9,7 @@ import (
 	"github.com/manifoldco/promptui"
 	promptlist "github.com/manifoldco/promptui/list"
 	"github.com/urfave/cli/v3"
+	"github.com/vandvag/advent-of-go/aoc"
 	"github.com/vandvag/advent-of-go/registry"
 	"github.com/vandvag/advent-of-go/solver"
 )
@@ -17,6 +18,45 @@ const (
 	exitLabel = "exit"
 	backLabel = "back"
 )
+
+func runCb(ctx context.Context, cmd *cli.Command) error {
+	day := cmd.Int(dayFlag)
+	year := cmd.Int(yearFlag)
+
+	if day == 0 && year != 0 {
+		return fmt.Errorf("You haven't specified a day")
+	}
+
+	if year == 0 && day != 0 {
+		return fmt.Errorf("You haven't specified a year")
+	}
+
+	if year == 0 && day == 0 {
+		menu(ctx, cmd)
+	}
+
+	ok := aoc.ValidYear(year)
+	if !ok {
+		return fmt.Errorf("Year %d is not valid! Please enter a year between 2015 and 2024\n", year)
+	}
+
+	ok = aoc.ValidDay(day)
+	if !ok {
+		return fmt.Errorf("Day %d is not valid! Please enter a day between 1 and 25\n", year)
+	}
+
+	solution, ok := registry.Get(year, day)
+	if !ok {
+		return fmt.Errorf("Somehow solution for %d/%d wasn't registered\n", year, day)
+	}
+
+	err := solver.Solve(solution, cmd.Bool(elapsedFlag))
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
 
 func menu(_ context.Context, cmd *cli.Command) error {
 	for {
@@ -58,6 +98,7 @@ func menu(_ context.Context, cmd *cli.Command) error {
 		if err != nil {
 			return err
 		}
+
 		solution, ok := registry.Get(yearInt, dayInt)
 		if !ok {
 			return fmt.Errorf("Somehow solution for %d/%d wasn't registered\n", yearInt, dayInt)
@@ -70,6 +111,7 @@ func menu(_ context.Context, cmd *cli.Command) error {
 
 		return nil
 	}
+
 }
 
 func daysMenu(year string) (string, error) {

@@ -14,11 +14,13 @@ import (
 const baseURL = "https://adventofcode.com/%d/day/%d/input"
 
 func GetInput(year int, day int) (string, error) {
-	if year > 2024 || year < 2015 {
+	ok := ValidYear(year)
+	if !ok {
 		return "", fmt.Errorf("Invalid year: %d\nAdvent of code started in 2015!\n", year)
 	}
 
-	if day <= 0 || day > 25 {
+	ok = ValidDay(day)
+	if !ok {
 		return "", fmt.Errorf("Invalid day: %d\nAdvent of code runs from 1st till the 25th of December each year!\n", day)
 	}
 

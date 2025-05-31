@@ -23,7 +23,7 @@ func Run() {
 				Aliases: nil,
 				Usage:   "Runs advent-of-go application",
 				Action: func(ctx context.Context, cmd *cli.Command) error {
-					return menu(ctx, cmd)
+					return runCb(ctx, cmd)
 				},
 				Flags: flags(),
 			},
