@@ -25,6 +25,7 @@ func Run() {
 				Action: func(ctx context.Context, cmd *cli.Command) error {
 					return menu(ctx, cmd)
 				},
+				Flags: flags(),
 			},
 		},
 		Description: "Solutions of puzzles for Advent of code (https://adventofcode.com)",

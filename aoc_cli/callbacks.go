@@ -18,7 +18,7 @@ const (
 	backLabel = "back"
 )
 
-func menu(_ context.Context, _ *cli.Command) error {
+func menu(_ context.Context, cmd *cli.Command) error {
 	for {
 		years := registry.RegisteredYears()
 		years = append(years, exitLabel)
@@ -63,7 +63,7 @@ func menu(_ context.Context, _ *cli.Command) error {
 			return fmt.Errorf("Somehow solution for %d/%d wasn't registered\n", yearInt, dayInt)
 		}
 
-		err = solver.Solve(solution)
+		err = solver.Solve(solution, cmd.Bool(elapsedFlag))
 		if err != nil {
 			return err
 		}
