@@ -1,4 +1,4 @@
-package aoc_2024
+package solutions
 
 import (
 	"fmt"
@@ -9,6 +9,7 @@ import (
 
 	"github.com/vandvag/advent-of-go/aoc"
 	"github.com/vandvag/advent-of-go/mathematics"
+	"github.com/vandvag/advent-of-go/registry"
 )
 
 func part1(input string) int {
@@ -83,7 +84,7 @@ func part2(input string) int {
 	return res
 }
 
-func Day01() {
+func run() {
 	fmt.Println("Day ", "01")
 	input, err := aoc.GetInput(2024, 1)
 	if err != nil {
@@ -93,3 +94,8 @@ func Day01() {
 	fmt.Println("Part 1: ", part1(input))
 	fmt.Println("Part 2: ", part2(input))
 }
+
+func Init() {
+	registry.Register(2024, 01, run)
+}
+
