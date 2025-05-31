@@ -3,12 +3,14 @@ package aoccli
 import (
 	"context"
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/manifoldco/promptui"
 	promptlist "github.com/manifoldco/promptui/list"
 	"github.com/urfave/cli/v3"
 	"github.com/vandvag/advent-of-go/registry"
+	"github.com/vandvag/advent-of-go/solver"
 )
 
 const (
@@ -48,7 +50,24 @@ func menu(_ context.Context, _ *cli.Command) error {
 			continue
 		}
 
-		fmt.Printf("You've selected year: %s, day: %s\n", year, day)
+		yearInt, err := strconv.Atoi(year)
+		if err != nil {
+			return err
+		}
+		dayInt, err := strconv.Atoi(day)
+		if err != nil {
+			return err
+		}
+		solution, ok := registry.Get(yearInt, dayInt)
+		if !ok {
+			return fmt.Errorf("Somehow solution for %d/%d wasn't registered\n", yearInt, dayInt)
+		}
+
+		err = solver.Solve(solution)
+		if err != nil {
+			return err
+		}
+
 		return nil
 	}
 }

@@ -11,6 +11,8 @@ import (
 	"github.com/vandvag/advent-of-go/registry"
 )
 
+const day01Str = "01"
+
 type Day01 struct{}
 
 func (d Day01) Part1(input string) string {
@@ -83,6 +85,14 @@ func (d Day01) Part2(input string) string {
 	}
 
 	return fmt.Sprintf("%d", res)
+}
+
+func (d Day01) Day() string {
+	return day01Str
+}
+
+func (d Day01) Year() string {
+	return year
 }
 
 func day01() {

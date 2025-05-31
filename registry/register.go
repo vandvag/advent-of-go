@@ -4,23 +4,20 @@ import (
 	"fmt"
 	"sort"
 	"strconv"
+
+	"github.com/vandvag/advent-of-go/solver"
 )
 
-type Solution interface {
-	Part1(input string) string
-	Part2(input string) string
-}
+var funcRegistry = make(map[int]map[int]solver.Solver)
 
-var funcRegistry = make(map[int]map[int]Solution)
-
-func Register(year, day int, fn Solution) {
+func Register(year, day int, fn solver.Solver) {
 	if funcRegistry[year] == nil {
-		funcRegistry[year] = make(map[int]Solution)
+		funcRegistry[year] = make(map[int]solver.Solver)
 	}
 	funcRegistry[year][day] = fn
 }
 
-func Get(year, day int) (Solution, bool) {
+func Get(year, day int) (solver.Solver, bool) {
 	yearMap, ok := funcRegistry[year]
 	if !ok {
 		return nil, false

@@ -67,7 +67,7 @@ func getInputFromAOCSite(year int, day int) ([]byte, error) {
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		log.Fatal("Error creating HTTP request: %s\n", err)
+		log.Fatalf("Error creating HTTP request: %s\n", err)
 	}
 
 	session_cookie, exists := os.LookupEnv("AOC_SESSION")
