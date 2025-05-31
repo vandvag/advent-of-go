@@ -12,7 +12,9 @@ import (
 	"github.com/vandvag/advent-of-go/registry"
 )
 
-func part1(input string) int {
+type Day01 struct{}
+
+func (d *Day01) Part1(input string) string {
 	var left []int
 	var right []int
 
@@ -47,10 +49,10 @@ func part1(input string) int {
 		res += mathematics.AbsInt(diff)
 	}
 
-	return res
+	return fmt.Sprintf("%d", res)
 }
 
-func part2(input string) int {
+func (d *Day01) Part2(input string) string {
 	var left []int
 	right := make(map[int]int)
 
@@ -81,21 +83,9 @@ func part2(input string) int {
 		res += num * right[num]
 	}
 
-	return res
-}
-
-func run() {
-	fmt.Println("Day ", "01")
-	input, err := aoc.GetInput(2024, 1)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Println("Part 1: ", part1(input))
-	fmt.Println("Part 2: ", part2(input))
+	return fmt.Sprintf("%d", res)
 }
 
 func Init() {
-	registry.Register(2024, 01, run)
+	registry.Register(2024, 01, Day01{})
 }
-
