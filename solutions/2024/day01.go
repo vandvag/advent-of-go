@@ -1,8 +1,7 @@
-package solutions
+package solutions_2024
 
 import (
 	"fmt"
-	"log"
 	"sort"
 	"strconv"
 	"strings"
@@ -14,7 +13,7 @@ import (
 
 type Day01 struct{}
 
-func (d *Day01) Part1(input string) string {
+func (d Day01) Part1(input string) string {
 	var left []int
 	var right []int
 
@@ -52,7 +51,7 @@ func (d *Day01) Part1(input string) string {
 	return fmt.Sprintf("%d", res)
 }
 
-func (d *Day01) Part2(input string) string {
+func (d Day01) Part2(input string) string {
 	var left []int
 	right := make(map[int]int)
 
@@ -86,6 +85,6 @@ func (d *Day01) Part2(input string) string {
 	return fmt.Sprintf("%d", res)
 }
 
-func Init() {
+func day01() {
 	registry.Register(2024, 01, Day01{})
 }
