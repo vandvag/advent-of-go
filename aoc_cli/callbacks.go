@@ -15,8 +15,10 @@ import (
 )
 
 const (
-	exitLabel = "exit"
-	backLabel = "back"
+	exitLabel  = "exit"
+	backLabel  = "back"
+	yearsLabel = "Years"
+	daysLabel  = "Days"
 )
 
 func runCb(ctx context.Context, cmd *cli.Command) error {
@@ -63,7 +65,7 @@ func menu(_ context.Context, cmd *cli.Command) error {
 		years := registry.RegisteredYears()
 		years = append(years, exitLabel)
 		prompt := promptui.Select{
-			Label:    "Years",
+			Label:    yearsLabel,
 			Items:    years,
 			Searcher: searcher(years),
 		}
@@ -86,7 +88,7 @@ func menu(_ context.Context, cmd *cli.Command) error {
 			return nil
 		}
 
-		if day == "back" {
+		if day == backLabel {
 			continue
 		}
 
@@ -120,7 +122,7 @@ func daysMenu(year string) (string, error) {
 	days = append(days, exitLabel)
 
 	prompt := promptui.Select{
-		Label:    "Days",
+		Label:    daysLabel,
 		Items:    days,
 		Searcher: searcher(days),
 	}
