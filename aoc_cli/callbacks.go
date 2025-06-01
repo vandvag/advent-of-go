@@ -23,36 +23,36 @@ func runCb(ctx context.Context, cmd *cli.Command) error {
 	day := cmd.Int(dayFlag)
 	year := cmd.Int(yearFlag)
 
-	if day == 0 && year != 0 {
-		return fmt.Errorf("You haven't specified a day")
-	}
-
-	if year == 0 && day != 0 {
-		return fmt.Errorf("You haven't specified a year")
-	}
-
 	if year == 0 && day == 0 {
 		menu(ctx, cmd)
-	}
+	} else {
+		if day == 0 && year != 0 {
+			return fmt.Errorf("You haven't specified a day")
+		}
 
-	ok := aoc.ValidYear(year)
-	if !ok {
-		return fmt.Errorf("Year %d is not valid! Please enter a year between 2015 and 2024\n", year)
-	}
+		if year == 0 && day != 0 {
+			return fmt.Errorf("You haven't specified a year")
+		}
 
-	ok = aoc.ValidDay(day)
-	if !ok {
-		return fmt.Errorf("Day %d is not valid! Please enter a day between 1 and 25\n", year)
-	}
+		ok := aoc.ValidYear(year)
+		if !ok {
+			return fmt.Errorf("Year %d is not valid! Please enter a year between 2015 and 2024\n", year)
+		}
 
-	solution, ok := registry.Get(year, day)
-	if !ok {
-		return fmt.Errorf("Somehow solution for %d/%d wasn't registered\n", year, day)
-	}
+		ok = aoc.ValidDay(day)
+		if !ok {
+			return fmt.Errorf("Day %d is not valid! Please enter a day between 1 and 25\n", year)
+		}
 
-	err := solver.Solve(solution, cmd.Bool(elapsedFlag))
-	if err != nil {
-		return err
+		solution, ok := registry.Get(year, day)
+		if !ok {
+			return fmt.Errorf("Somehow solution for %d/%d wasn't registered\n", year, day)
+		}
+
+		err := solver.Solve(solution, cmd.Bool(elapsedFlag))
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
